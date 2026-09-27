@@ -1,102 +1,118 @@
-/* Modal container */
+/*
+ * Added by aeelre0
+ *
+ * No styles.css existed for this plugin before, so the modal markup in
+ * Modal.ts / ModalMultiple.ts (wiki-modal, wiki-search-wrapper,
+ * wiki-suggestions, wiki-button-generate, ...) was rendering completely
+ * unstyled. This file styles those classes using Obsidian's own CSS
+ * variables, so the modal automatically matches the user's active theme
+ * (light/dark/custom) instead of looking like a bare HTML form.
+ */
+
 .wiki-modal {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	max-width: 480px;
+	padding: 0.5em 0.25em 0.25em;
 }
 
 .wiki-modal label {
-	font-size: 1.1em;
-	color: var(--text-normal);
-	margin-bottom: 2px;
+	display: block;
+	margin-bottom: 0.6em;
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
 }
 
+.wiki-modal input[type='text'] {
+	width: 100%;
+	padding: 0.55em 0.75em;
+	font-size: var(--font-ui-medium);
+	background-color: var(--background-modifier-form-field);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	color: var(--text-normal);
+	outline: none;
+	transition:
+		border-color 0.1s ease-in-out,
+		box-shadow 0.1s ease-in-out;
+}
+
+.wiki-modal input[type='text']:focus {
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+}
+
+/* Single-entry modal: the wrapper is the positioning context for its
+   suggestions dropdown. */
 .wiki-search-wrapper {
 	position: relative;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	width: 100%;
+	margin-bottom: 0.9em;
+}
+
+/* Multi-entry modal: each row has its own input + dropdown, so each row
+   needs to be its own positioning context. */
+.wiki-input-row {
+	position: relative;
+	margin-bottom: 0.6em;
+}
+
+.wiki-suggestions {
+	position: absolute;
+	top: calc(100% + 4px);
+	left: 0;
+	right: 0;
+	z-index: 50;
+	max-height: 16em;
+	overflow-y: auto;
+	background-color: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	box-shadow: var(--shadow-s);
 }
 
 .wiki-suggestions-hidden {
 	display: none;
 }
 
-.wiki-search-wrapper input {
-	width: 100%;
-	box-sizing: border-box;
-	padding: 8px 10px;
-	font-size: 1em;
-	border-radius: var(--radius-s);
-	border: 1px solid var(--background-modifier-border);
-	background: var(--background-secondary);
-	color: var(--text-normal);
-}
-
-.wiki-search-wrapper input:focus {
-	outline: none;
-}
-
-.wiki-input-row {
-	position: relative;
-	width: 100%;
-}
-
-.wiki-suggestions {
-
-
-}
-
-.wiki-suggestions {
-	top: calc(100% + 4px);
-	background: var(--background-primary);
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius-s);
-	max-height: 220px;
-	overflow-y: auto;
-}
-
 .wiki-suggestion-item {
-	padding: 8px 10px;
+	padding: 0.5em 0.75em;
 	cursor: pointer;
-	border-bottom: 1px solid var(--background-modifier-border-hover);
+	border-bottom: 1px solid var(--background-modifier-border);
 }
 
 .wiki-suggestion-item:last-child {
 	border-bottom: none;
 }
 
-.wiki-suggestion-item:hover,
-.wiki-suggestion-item.is-selected {
-	background: var(--background-modifier-hover);
+.wiki-suggestion-item:hover {
+	background-color: var(--background-modifier-hover);
 }
 
 .wiki-suggestion-title {
-	font-size: 0.95em;
+	font-size: var(--font-ui-medium);
+	font-weight: 600;
 	color: var(--text-normal);
 }
 
 .wiki-suggestion-desc {
 	display: block;
-	font-size: 0.8em;
-	color: var(--text-faint);
-	margin-top: 2px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	margin-top: 0.15em;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
 }
 
-.wiki-modal button {
-	align-self: flex-end;
-	padding: 6px 16px;
+.wiki-button-generate {
+	display: block;
+	width: 100%;
+	margin-top: 0.9em;
+	padding: 0.55em 0.75em;
+	font-size: var(--font-ui-medium);
+	font-weight: 600;
+	color: var(--text-on-accent);
+	background-color: var(--interactive-accent);
 	border: none;
+	border-radius: var(--radius-s);
 	cursor: pointer;
-	font-weight: 500;
+	transition: background-color 0.1s ease-in-out;
 }
 
-.wiki-modal button:hover {
+.wiki-button-generate:hover {
+	background-color: var(--interactive-accent-hover);
 }
-
-

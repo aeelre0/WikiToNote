@@ -1,73 +1,91 @@
-import {App, PluginSettingTab, Setting} from "obsidian";
-import WikiPlugin from "./Plugin";
-import {LANGUAGE_CODES, toPair} from "./LanguageCodes";
+import { App, PluginSettingTab, Setting } from 'obsidian'
+import WikiPlugin from './Plugin'
+import { LANGUAGE_CODES, toPair } from './LanguageCodes'
 
 interface WikiPluginSettings {
-	countryPrefix: string;
-	tableBackground: string;
-	tableBorder: string;
+	countryPrefix: string
+	tableBackground: string
+	tableBorder: string
+	/* Added by aeelre0 */
+	insertIntoActiveNote: boolean
+	/* ---------------- */
 }
 
 const DEFAULT_SETTINGS: WikiPluginSettings = {
 	countryPrefix: 'en',
 	tableBackground: '#323232',
 	tableBorder: '#434343',
+	/* Added by aeelre0 */
+	insertIntoActiveNote: false,
+	/* ---------------- */
 }
 
 class WikiSettingsTab extends PluginSettingTab {
-	plugin: WikiPlugin;
+	plugin: WikiPlugin
 
 	constructor(app: App, plugin: WikiPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
+		super(app, plugin)
+		this.plugin = plugin
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this
 
-		containerEl.empty();
+		containerEl.empty()
 
 		new Setting(containerEl)
 			.setName('Country prefix')
-			.setDesc("The prefix you want for the language you use. Example: *en*.wikipedia.org")
+			.setDesc('The prefix you want for the language you use. Example: *en*.wikipedia.org')
 			.addDropdown((dropdown) => {
-
-				for(let i = 0; i < LANGUAGE_CODES.length; i++) {
-					const pair = toPair(i);
-					dropdown.addOption(pair[1], pair[0]);
+				for (let i = 0; i < LANGUAGE_CODES.length; i++) {
+					const pair = toPair(i)
+					dropdown.addOption(pair[1], pair[0])
 				}
 
-				dropdown.setValue(this.plugin.settings.countryPrefix);
+				dropdown.setValue(this.plugin.settings.countryPrefix)
 				dropdown.onChange(async (value) => {
-					this.plugin.settings.countryPrefix = value;
-					await this.plugin.saveSettings();
-				});
-			});
+					this.plugin.settings.countryPrefix = value
+					await this.plugin.saveSettings()
+				})
+			})
 		new Setting(containerEl)
 			.setName('Table background')
-			.setDesc("The background color of tables or images")
+			.setDesc('The background color of tables or images')
 			.addColorPicker((color) => {
-
-				color.setValue(this.plugin.settings.tableBackground);
+				color.setValue(this.plugin.settings.tableBackground)
 				color.onChange(async (value) => {
-					this.plugin.settings.tableBackground = value;
-					await this.plugin.saveSettings();
-				});
-			});
+					this.plugin.settings.tableBackground = value
+					await this.plugin.saveSettings()
+				})
+			})
 		new Setting(containerEl)
 			.setName('Table border')
-			.setDesc("The border color of tables or images")
+			.setDesc('The border color of tables or images')
 			.addColorPicker((color) => {
-
-				color.setValue(this.plugin.settings.tableBorder);
+				color.setValue(this.plugin.settings.tableBorder)
 				color.onChange(async (value) => {
-					this.plugin.settings.tableBorder = value;
-					await this.plugin.saveSettings();
-				});
-			});
+					this.plugin.settings.tableBorder = value
+					await this.plugin.saveSettings()
+				})
+			})
+
+		/* Added by aeelre0 */
+		new Setting(containerEl)
+			.setName('Insert into active note')
+			.setDesc(
+				'If enabled, imported articles are inserted at the cursor in the currently active note instead of creating a new note. Falls back to creating a new note if no note is open.',
+			)
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.insertIntoActiveNote)
+				toggle.onChange(async (value) => {
+					this.plugin.settings.insertIntoActiveNote = value
+					await this.plugin.saveSettings()
+				})
+			})
+		/* ---------------- */
 	}
 }
 
-export type { WikiPluginSettings };
-export {DEFAULT_SETTINGS };
-export {WikiSettingsTab};
+export type { WikiPluginSettings }
+export { DEFAULT_SETTINGS }
+export { WikiSettingsTab }
