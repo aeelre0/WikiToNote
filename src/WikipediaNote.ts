@@ -140,6 +140,53 @@ async function cleanWikiHtml(title: string, countryPrefix: string) {
  * anything inside a table, so table images keep being handled by their own
  * block instead.
  */
+
+/* Added by aeelre0 */
+/*
+ * Wikipedia renders formulas as a hidden MathML block plus an <img> SVG
+ * fallback, with the actual LaTeX source stored in the
+ * <annotation encoding="application/x-tex"> tag (duplicated in the
+ * fallback img's alt attribute). Previously this whole thing fell through
+ * to the generic image handling below, which turned the formula's img
+ * into a "(see image)" link — and on top of that, the MathML's own visual
+ * text nodes (e.g. "f ( x ) \= C") leaked into the markdown as plain,
+ * garbled text right next to it. Obsidian couldn't render any of it as
+ * actual math.
+ *
+ * Here we detect Wikipedia's math extension wrapper, pull out the raw TeX
+ * source, and replace the entire wrapper (MathML + fallback text + img,
+ * all of it) with real Obsidian/MathJax inline math syntax ($...$), which
+ * Obsidian renders properly. This must run before processWikipediaImages
+ * so the formula's <img> is already gone by the time that function looks
+ * for images to convert.
+ */
+function processWikipediaMath($: cheerio.CheerioAPI): Map<string, string> {
+	const mathPlaceholders = new Map<string, string>()
+	let mathIndex = 0
+
+	$('[typeof*="mw:Extension/math"]').each((_, mathEl) => {
+		const $math = $(mathEl)
+
+		const tex =
+			$math.find('annotation[encoding="application/x-tex"]').first().text().trim() ||
+			$math.find('img').first().attr('alt')?.trim() ||
+			''
+
+		if (!tex) {
+			$math.remove()
+			return
+		}
+
+		const placeholder = `AEELREMATH${mathIndex++}PLACEHOLDER`
+
+		mathPlaceholders.set(placeholder, `$${tex}$`)
+		$math.replaceWith(placeholder)
+	})
+
+	return mathPlaceholders
+}
+/* ---------------- */
+
 function processWikipediaImages($: cheerio.CheerioAPI): Map<string, string> {
 	const imagePlaceholders = new Map<string, string>()
 	let imageIndex = 0
@@ -502,6 +549,10 @@ async function fetchWikipediaMarkdown(
 	/* ---------------- */
 
 	/* Added by aeelre0 */
+	const mathPlaceholders = processWikipediaMath($)
+	/* ---------------- */
+
+	/* Added by aeelre0 */
 	const imagePlaceholders = processWikipediaImages($)
 	/* ---------------- */
 
@@ -642,6 +693,10 @@ async function fetchWikipediaMarkdown(
 	/* Added by aeelre0 */
 	for (const [placeholder, imageReference] of imagePlaceholders) {
 		markdown = markdown.split(placeholder).join(imageReference)
+	}
+
+	for (const [placeholder, mathReference] of mathPlaceholders) {
+		markdown = markdown.split(placeholder).join(mathReference)
 	}
 
 	markdown = markdown.replace(/\n(?=#{1,6} )/g, '\n\n___\n\n')
