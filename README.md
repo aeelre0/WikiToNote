@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📚 Wiki2Note
+# 📚 Wiki2Md
 
 **Wikipedia → Obsidian, without the copy-paste.**
 
@@ -29,7 +29,7 @@ A fast, no-nonsense Obsidian plugin for turning any Wikipedia article into a cle
 
 ## About
 
-**Wiki2Note** makes it effortless to turn a Wikipedia article into an Obsidian note.
+**Wiki2Md** makes it effortless to turn a Wikipedia article into an Obsidian note.
 
 No manual copy-pasting, no cleaning up broken HTML, no fighting with formatting — just run a command, type an article name, and get a clean Markdown note in your vault.
 
@@ -61,8 +61,8 @@ No manual copy-pasting, no cleaning up broken HTML, no fighting with formatting 
 2. Run one of:
 
    ```text
-   Wiki 2 Note: Import Wikipedia article
-   Wiki 2 Note: Import multiple articles
+   Wiki2Md: Import Wikipedia article
+   Wiki2Md: Import multiple articles
    ```
 
 3. Start typing an article name and pick a suggestion (or just type the exact title).
@@ -72,7 +72,7 @@ No manual copy-pasting, no cleaning up broken HTML, no fighting with formatting 
 
 ## ⚙️ Settings
 
-Available under **Settings → Wiki2Note**:
+Available under **Settings → Wiki2Md**:
 
 | Setting | Description |
 | --- | --- |
@@ -84,7 +84,7 @@ Available under **Settings → Wiki2Note**:
 
 ## 🍴 Fork
 
-Wiki2Note is a **fork of [CommandJoo/WikiToNote](https://github.com/CommandJoo/WikiToNote)**.
+Wiki2Md is a **fork of [CommandJoo/WikiToNote](https://github.com/CommandJoo/WikiToNote)**.
 
 The original project provided the foundation for this plugin, and this repository continues that work with independent modifications and contributions.
 
@@ -122,7 +122,7 @@ GPL-2.0-only
 
 ## 🙌 Credits
 
-Wiki2Note would not exist without the original work of **Johannes Hans ([@CommandJoo](https://github.com/CommandJoo))**.
+Wiki2Md would not exist without the original work of **Johannes Hans ([@CommandJoo](https://github.com/CommandJoo))**.
 
 Original repository: https://github.com/CommandJoo/WikiToNote
 
